@@ -1,42 +1,45 @@
 from flask import Blueprint, jsonify
 
-class Book:
-    def __init__(self, id, title, description):
+class Dessert:
+    def __init__(self, id, name, description):
         self.id = id
-        self.title = title
+        self.name = name
         self.description = description
 
-books = [
-    Book(1, "Fictional Book", "A fantasy novel set in an imaginary world."),
-    Book(2, "Wheel of Time", "A fantasy novel set in an imaginary world."),
-    Book(3, "Fictional Book Title", "A fantasy novel set in an imaginary world.")
+# from Delish's fall dessert recipes
+desserts = [
+    Dessert(1, "Caramel Apple Pie", "Classic apple pie drizzled with caramel"),
+    Dessert(2, "Apple Cider Doughnuts", "Sweet, airy doughnuts served with blueberry-ginger jam"),
+    Dessert(3, "Pumpkin Chocolate Chip Cookies", "Soft, chewy chocolate chip cookies with a hint of pumpkin")
 ]
 
-hello_world_bp = Blueprint("hello_world_bp", __name__)
-books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
 
-@books_bp.route("", methods=["GET"])
-def handle_books():
-    books_response = []
-    for book in books:
-        books_response.append(
+hello_world_bp = Blueprint("hello_bp", __name__)
+desserts_bp = Blueprint("desserts_bp", __name__, url_prefix="/desserts")
+
+
+@desserts_bp.route("", methods=["GET"])
+def handle_desserts():
+    desserts_response = []
+    for dessert in desserts:
+        desserts_response.append(
             {
-                "id": book.id,
-                "title": book.title,
-                "description": book.description
+                "id": dessert.id,
+                "name": dessert.name,
+                "description": dessert.description
             }
         )
-    return jsonify(books_response)
+    return jsonify(desserts_response)
 
-@books_bp.route("/<book_id>", methods=["GET"])
-def handle_book(book_id):
-    book_id = int(book_id)
-    for book in books:
-        if book.id == book_id:
+@desserts_bp.route("/<dessert_id>", methods=["GET"])
+def handle_dessert(dessert_id):
+    dessert_id = int(dessert_id)
+    for dessert in desserts:
+        if dessert.id == dessert_id:
             return {
-                "id": book.id,
-                "title": book.title,
-                "description": book.description,
+                "id": dessert.id,
+                "title": dessert.title,
+                "description": dessert.description,
             }
 
 
@@ -53,14 +56,3 @@ def say_hello_json():
         "hobbies": ["Fishing", "Swimming", "Watching Reality Shows"]
     }
 
-
-@hello_world_bp.route("/broken-endpoint-with-broken-server-code")
-def broken_endpoint():
-    response_body = {
-        "name": "Ada Lovelace",
-        "message": "Hello!",
-        "hobbies": ["Fishing", "Swimming", "Watching Reality Shows"]
-    }
-    new_hobby = "Surfing"
-    response_body["hobbies"].append(new_hobby)
-    return response_body

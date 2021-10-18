@@ -8,7 +8,7 @@ def create_app(test_config=None):
     from .routes import hello_world_bp
     app.register_blueprint(hello_world_bp)
 
-    from .routes import books_bp
-    app.register_blueprint(books_bp)
+    from .routes import desserts_bp
+    app.register_blueprint(desserts_bp)
 
     return app
