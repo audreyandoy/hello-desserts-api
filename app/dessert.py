@@ -4,7 +4,7 @@ class Dessert:
         self.name = name
         self.description = description
 
-    def to_json(self):
+    def to_dict(self):
         '''
         Helper method to turn object into dictionary
         '''

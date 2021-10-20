@@ -8,7 +8,7 @@ def handle_desserts():
     # describe response for displaying all desserts
     desserts_response = []
     for dessert in desserts_list:
-        desserts_response.append(dessert.to_json())
+        desserts_response.append(dessert.to_dict())
 
     return jsonify(desserts_response)
 
@@ -17,7 +17,7 @@ def handle_dessert(dessert_id):
     dessert_id = int(dessert_id)
     for dessert in desserts_list:
         if dessert.id == dessert_id:
-            return dessert.to_json()
+            return dessert.to_dict()
 
     return jsonify("id not found"), 404 # this is how we can return 404 code 
     # Returning status codes, can be found in More Flask lesson in "404s and More Queries"
