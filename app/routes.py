@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, json, jsonify, request
 from app.models.dessert import Dessert 
 from app import db
@@ -34,14 +35,38 @@ def handle_desserts():
         return jsonify(desserts_response), 200
 
 
-@desserts_bp.route("/<dessert_id>", methods=["GET"])
+@desserts_bp.route("/<dessert_id>", methods=["GET", "PUT", "PATCH", "DELETE"])
 def handle_dessert(dessert_id):
     dessert = Dessert.query.get(dessert_id)
 
     if dessert is None:
         return jsonify(f"Dessert {dessert_id} not found"), 404
 
-    return dessert.to_json()
+    if request.method == "GET":
+        return dessert.to_json()
+
+    elif request.method == "PUT":
+        request_body = request.get_json()
+        dessert.name, dessert.description = request_body["name"], request_body["description"]
+        db.session.commit()
+        return jsonify(f"Dessert {dessert.id} succesfully updated"), 200
+
+    elif request.method == "PATCH":
+        request_body = request.get_json()
+        
+        if "name" in request_body:
+            dessert.name = request_body["name"]
+        elif "description" in request_body:
+            dessert.description = request_body["description"]
+
+        db.session.commit()
+
+        return jsonify(f"Dessert #{dessert.id} sucessfully patched"), 200
+
+    elif request.method == "DELETE":
+        db.session.delete(dessert)
+        db.session.commit()
+        return jsonify(f"Dessert #{dessert.id} sucessfully deleted"), 200
 
 
 @hello_world_bp.route("/hello-world", methods=["GET"])
